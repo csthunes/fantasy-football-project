@@ -131,6 +131,8 @@ def build_weighted_aggregations(
     if blended is None or blended.empty:
         return []
 
+    blended = blended.round(2)
+
     players_by_id = _load_players(db, blended["playerId"].tolist())
     selection = {
         "type": "weighted",

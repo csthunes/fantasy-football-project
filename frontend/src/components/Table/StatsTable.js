@@ -35,16 +35,16 @@ const getColumnId = (field, section) => {
 };
 
 
+// TODO: Return missing data value back to null instead of 0, 
+// will require some changes to the table to handle null values correctly
 const getValue = (row, field, section) => {
     switch (field.source) {
         case "root":
-            return row?.[field.key] ?? null;
-
+            return row?.[field.key] ?? 0;
         case "selection":
-            return row?.selection?.[field.key] ?? null;
-
+            return row?.selection?.[field.key] ?? 0;
         default:
-            return row?.stats?.[section]?.[field.key] ?? null;
+            return row?.stats?.[section]?.[field.key] ?? 0;
     }
 };
 
@@ -100,7 +100,7 @@ const statColumns = [
                 filterSelectOptions: [
                     "ARI", "ATL", "BAL", "BUF", "CAR", "CHI",
                     "CIN", "CLE", "DAL", "DEN", "DET", "GB",
-                    "HOU", "IND", "JAC", "KC", "LAC", "LAR",
+                    "HOU", "IND", "JAX", "KC", "LAC", "LAR",
                     "LV", "MIA", "MIN", "NE", "NO", "NYG",
                     "NYJ", "PHI", "PIT", "SEA", "SF", "TB",
                     "TEN", "WAS", "FA",
@@ -276,7 +276,6 @@ const statColumns = [
             ["rushingPercentAttemptsGteEightDefenders", "8+ DEF%"],
             ["rushingRushPctOverExpected", "RYOE%"],
             ["rushingRushYardsOverExpectedPerAtt", "RYOE/ATT"],
-            ["rushingYardsPerAtt", "Y/A"],
             ["rushingEpaPerAtt", "EPA/ATT"],
         ]),
     },
@@ -563,7 +562,6 @@ const columnVisibility = Object.fromEntries(
 );
 
 
-
 const formatAggregationType = (type) => {
     switch (type) {
         case "season":
@@ -613,7 +611,6 @@ const StatsTable = () => {
     }, [scoringRules, pointsType, dispatch]);
 
     useEffect(() => {
-        console.log("aggregationType:", aggregationType, "profileId:", profileId, "profiles:", profiles);
         if (aggregationType === "profile" && !profileId && profiles.length > 0) {
             setProfileId(profiles[0]._id);
         } else if (aggregationType !== "profile") {
@@ -776,7 +773,7 @@ const StatsTable = () => {
                         <MenuItem value={"IND"}>
                             Indianapolis
                         </MenuItem>
-                        <MenuItem value={"JAC"}>
+                        <MenuItem value={"JAX"}>
                             Jacksonville
                         </MenuItem>
                         <MenuItem value={"KC"}>
